@@ -1,0 +1,18 @@
+{
+  "name": "cyphernft",
+  "version": "1.0.0",
+  "description": "an nft for Cypherpunks Nightmares",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "dependencies": {
+    "@openzeppelin/contracts": "^3.3.0-solc-0.7"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
+}
