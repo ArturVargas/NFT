@@ -7,3 +7,14 @@ body {
 .hashText {
   color: $teal-500;
 }
+
+.btn-outline-evnd {
+  color: $teal-500;
+  border-color: $teal-500;
+}
+
+.btn-outline-evnd:hover {
+  color: #fff;
+  background-color: $teal-500;
+  border-color: $teal-500;
+}
