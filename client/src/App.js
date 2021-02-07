@@ -6,6 +6,7 @@ import Particles from 'react-particles-js';
 
 import Navbar from './components/Navbar/Navbar';
 import Form from './components/Form/Form';
+import Card from './components/Card/Card';
 
 const particlesOptions = {
   particles: {
@@ -25,6 +26,8 @@ const particlesOptions = {
 function App() {
   const [account, setAccount] = useState([]);
   const [contract, setContract] = useState();
+  const [admin, setAdmin] = useState(undefined);
+  const [tokensImgs, setTokensImgs] = useState([]);
 
   useEffect(() => {
     const loadWeb3 = async () => {
@@ -36,7 +39,7 @@ function App() {
       } else {
         window.alert('Non-Ethereum browser detected. You should consider trying Metamask!')
       }
-    }
+    };
 
     const loadBlockchainData = async () => {
       const web3 = window.web3;
@@ -51,11 +54,23 @@ function App() {
             deployedNetwork && deployedNetwork.address,
           );
           setContract(contract);
+          const admin = await contract.methods.admin().call();
+          setAdmin(admin);
+
+          let nftBalance = await contract.methods.balanceOf(accounts[0]).call();
+          let urisArray = [];
+          for (let i = 0; i < nftBalance; i++) {
+            let tokenId = await contract.methods.tokenOfOwnerByIndex(accounts[0], i).call();
+            let tokenUri = await contract.methods.tokenURI(tokenId).call();
+            urisArray.push(tokenUri);
+          };
+          setTokensImgs([...urisArray]);
         } else {
           window.alert('Contract not deployed or not detected network...');
         }
       }
-    }
+    };
+
     loadWeb3();
     loadBlockchainData();
 
@@ -63,15 +78,36 @@ function App() {
       setAccount(accounts[0]);
     });
 
-  }, [account])
+  }, [account]);
+
+  const isReady = () => {
+    return (
+      typeof contract !== 'undefined'
+      && typeof account !== 'undefined'
+    );
+  }
+
+  if (!isReady()) {
+    return <div>Loading Web3, accounts, and contract...</div>;
+  }
 
   return (
     <div>
       <Navbar />
       <Particles className='particles' params={particlesOptions} />
       <div className='container'>
-        <Form contract={contract} account={account} />
+        {
+          account === admin && (
+            <Form contract={contract} account={account} />
+          )
+        }
+        {
+          tokensImgs.length > 0 && (
+            <Card tokenUri={tokensImgs} />
+          )
+        }
       </div>
+
     </div>
   );
 }
