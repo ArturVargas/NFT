@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 
 function Form({ contract, account }) {
-  console.log('--->> ', { contract , account })
   const [formData, setFormData] = useState({ addressee: '', urlImage: '' });
 
   const handleInputChange = (event) => {
@@ -30,6 +29,9 @@ function Form({ contract, account }) {
                 className="form-control"
                 name="addressee"
                 placeholder="0x12A..."
+                required
+                minLength={20}
+                maxLength={50}
                 onChange={handleInputChange}
               />
             </div>
@@ -45,7 +47,10 @@ function Form({ contract, account }) {
                 type="text"
                 className="form-control"
                 name="urlImage"
-                placeholder="https://myImage.com"
+                placeholder="https://myNFTImage.com"
+                required
+                minLength={10}
+                maxLength={50}
                 onChange={handleInputChange}
               />
             </div>
